@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
 const { User } = require('../models');
+const Organization = require('../models/organization.model');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -10,6 +11,9 @@ const ApiError = require('../utils/ApiError');
 const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  }
+  if (await Organization.isOrganizationNameTaken(userBody.orgName)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Organization name already taken');
   }
   return User.create(userBody);
 };
