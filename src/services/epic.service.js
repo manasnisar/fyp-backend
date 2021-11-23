@@ -3,7 +3,7 @@ const { Epic } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createEpic = async (epicBody) => {
-  if (await Epic.isNameTaken(epicBody.name, epicBody, projectId)) {
+  if (await Epic.isNameTaken(epicBody.name, epicBody.projectId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Epic name already taken');
   }
   return Epic.create(epicBody);
@@ -23,7 +23,7 @@ const updateEpicById = async (epicId, updateBody) => {
   if (!epic) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Epic not found');
   }
-  if (await Epic.isNameTaken(updateBody.name, updateBody, projectId)) {
+  if (await Epic.isNameTaken(updateBody.name, updateBody.projectId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Epic name already taken');
   }
   Object.assign(epic, updateBody);

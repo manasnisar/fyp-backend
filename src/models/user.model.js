@@ -6,7 +6,12 @@ const { roles } = require('../config/roles');
 
 const userSchema = mongoose.Schema(
   {
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    lastName: {
       type: String,
       required: true,
       trim: true,
@@ -38,7 +43,10 @@ const userSchema = mongoose.Schema(
     organization: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Organization',
-      required: true,
+    },
+    projects: {
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: 'Project',
     },
     role: {
       type: String,

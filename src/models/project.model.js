@@ -14,18 +14,22 @@ const projectSchema = mongoose.Schema(
       unique: true,
       trim: true,
     },
+    category: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     organizationId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Organization',
       required: true,
     },
-    teammembers: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: 'User',
+    createdAt: {
+      type: Date,
       required: true,
     },
-    timeCreated: {
-      type: String,
+    updatedAt: {
+      type: Date,
       required: true,
     },
     totalEpics: {

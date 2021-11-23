@@ -10,7 +10,7 @@ const orgSchema = mongoose.Schema(
       trim: true,
       lowercase: true,
     },
-    Owner: {
+    owner: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: true,

@@ -6,7 +6,7 @@ const projectRoute = require('./project.route');
 const epicRoute = require('./epic.route');
 const issueRoute = require('./issue.route');
 
-const config = require('../../config/config');
+// const config = require('../../config/config');
 
 const router = express.Router();
 
@@ -16,23 +16,23 @@ const defaultRoutes = [
     route: authRoute,
   },
   {
-    path: '/users',
+    path: '/user',
     route: userRoute,
   },
   {
-    path: '/organizations',
+    path: '/organization',
     route: organizationRoute,
   },
   {
-    path: '/projects',
+    path: '/project',
     route: projectRoute,
   },
   {
-    path: '/epics',
+    path: '/epic',
     route: epicRoute,
   },
   {
-    path: '/issues',
+    path: '/issue',
     route: issueRoute,
   },
 ];
@@ -42,7 +42,9 @@ defaultRoutes.forEach((route) => {
 });
 
 /* istanbul ignore next */
-if (config.env === 'development') {
-}
-
+// if (config.env === 'development') {
+//   devRoutes.forEach((route) => {
+//     router.use(route.path, route.route);
+//   });
+// }
 module.exports = router;

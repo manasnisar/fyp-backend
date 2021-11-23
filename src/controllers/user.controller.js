@@ -29,6 +29,21 @@ const updateUser = catchAsync(async (req, res) => {
   res.send(user);
 });
 
+const currentUser = catchAsync(async (req, res) => {
+  res.send({
+    currentUser: {
+      id: 187135,
+      name: 'Lord Gaben',
+      email: 'gaben@jira.guest',
+      avatarUrl: 'https://i.ibb.co/6RJ5hq6/gaben.jpg',
+      createdAt: '2021-11-21T07:18:51.936Z',
+      updatedAt: '2021-11-21T07:18:51.949Z',
+      projectId: 62131,
+    },
+  });
+  return;
+});
+
 const deleteUser = catchAsync(async (req, res) => {
   await userService.deleteUserById(req.params.userId);
   res.status(httpStatus.NO_CONTENT).send();
@@ -40,4 +55,5 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
+  currentUser,
 };

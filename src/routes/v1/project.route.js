@@ -17,7 +17,7 @@ router
 
 router
   .route('/manage/:projectId')
-  .get(auth('getProjects'), projectController.getProjectById)
+  .get( projectController.getProjectById)
   .patch(auth('manageProjects'), validate(projectValidation.updateProject), projectController.updateProjectById)
   .delete(auth('manageProjects'), validate(projectValidation.deleteProject), projectController.deleteProjectById);
 
