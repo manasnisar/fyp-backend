@@ -14,11 +14,6 @@ const epicSchema = mongoose.Schema(
       unique: true,
       trim: true,
     },
-    type: {
-      type: String,
-      enum: ['epic', 'story'],
-      default: 'epic',
-    },
     projectId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Project',
@@ -32,11 +27,6 @@ const epicSchema = mongoose.Schema(
       type: String,
       enum: ['backlog', 'active'],
       default: 'backlog',
-    },
-    status: {
-      type: String,
-      enum: ['ICE BOX', 'IN PROGRESS', 'DONE'],
-      default: 'ICE BOX',
     },
   },
   {

@@ -8,6 +8,10 @@ const projectSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    description: {
+      type: String,
+      trim: true,
+    },
     pin: {
       type: String,
       required: true,
@@ -19,22 +23,12 @@ const projectSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    organizationId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Organization',
-      required: true,
-    },
-    createdAt: {
-      type: Date,
-      required: true,
-    },
-    updatedAt: {
-      type: Date,
-      required: true,
-    },
     totalEpics: {
       type: Number,
       default: 0,
+    },
+    members: {
+      type: [mongoose.SchemaTypes.ObjectId],
     },
     totalIssues: {
       type: Number,

@@ -6,14 +6,13 @@ const { roles } = require('../config/roles');
 
 const userSchema = mongoose.Schema(
   {
-    firstName: {
+    name: {
       type: String,
       required: true,
       trim: true,
     },
-    lastName: {
+    avatarUrl: {
       type: String,
-      required: true,
       trim: true,
     },
     email: {
@@ -40,10 +39,6 @@ const userSchema = mongoose.Schema(
       },
       private: true, // used by the toJSON plugin
     },
-    organization: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Organization',
-    },
     projects: {
       type: [mongoose.SchemaTypes.ObjectId],
       ref: 'Project',
@@ -51,7 +46,7 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       enum: roles,
-      default: 'owner',
+      default: 'member',
     },
     isEmailVerified: {
       type: Boolean,

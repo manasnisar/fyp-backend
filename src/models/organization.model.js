@@ -15,6 +15,15 @@ const orgSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    projectIds: {
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: 'Project',
+      required: true,
+    },
+    memberIds: {
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

@@ -3,11 +3,30 @@ const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService, organizationService } = require('../services');
 
 const register = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body);
-  await organizationService.createOrganization({ name: req.body.orgName, owner: user._id });
+  let user;
+  try {
+    const orgExist = await organizationService.orgExists(req.body.organization);
 
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+    if (req.body.role === 'member') {
+      if (!orgExist) {
+        res.status(httpStatus.NOT_FOUND).send('Organization not found!');
+        return;
+      }
+      user = await userService.createUser(req.body);
+      await organizationService.addMemberToOrgByID({ name: req.body.organization, member: user._id });
+    } else if (req.body.role === 'owner') {
+      if (orgExist) {
+        res.status(httpStatus.BAD_REQUEST).send('Organization already exists!');
+        return;
+      }
+      user = await userService.createUser(req.body);
+      await organizationService.createOrganization({ name: req.body.organization, owner: user._id });
+    }
+    const tokens = await tokenService.generateAuthTokens(user);
+    res.status(httpStatus.CREATED).send({ user, tokens });
+  } catch (e) {
+    res.status(e.statusCode).send(e.message);
+  }
 });
 
 const login = catchAsync(async (req, res) => {
@@ -49,7 +68,7 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const authchecker = catchAsync(async (req, res) => {
+const authChecker = catchAsync(async (req, res) => {
   res.send({ user: req.user });
 });
 
@@ -62,5 +81,5 @@ module.exports = {
   resetPassword,
   sendVerificationEmail,
   verifyEmail,
-  authchecker,
+  authChecker,
 };

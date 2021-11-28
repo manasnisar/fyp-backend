@@ -3,9 +3,13 @@ const { toJSON, paginate } = require('./plugins');
 
 const issueSchema = mongoose.Schema(
   {
-    summary: {
+    title: {
       type: String,
       required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
       trim: true,
     },
     pin: {
@@ -16,7 +20,7 @@ const issueSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['task', 'bug'],
+      enum: ['task', 'bug', 'story'],
       required: true,
     },
     epicId: {
@@ -24,21 +28,17 @@ const issueSchema = mongoose.Schema(
       ref: 'Epic',
       required: true,
     },
-    description: {
-      type: String,
-      trim: true,
-    },
     status: {
       type: String,
       enum: ['ICE BOX', 'BLOCKED', 'IN PROGRESS', 'TESTING', 'DONE'],
       default: 'ICE BOX',
     },
-    assignee: {
+    assigneeId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: true,
     },
-    reporter: {
+    reporterId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: true,
