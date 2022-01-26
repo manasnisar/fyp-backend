@@ -20,7 +20,8 @@ const register = catchAsync(async (req, res) => {
         return;
       }
       user = await userService.createUser(req.body);
-      await organizationService.createOrganization({ name: req.body.organization, owner: user._id });
+      const org = await organizationService.createOrganization({ name: req.body.organization, owner: user._id });
+      user = await userService.updateUserById(user._id, { orgId: org._id });
     }
     const tokens = await tokenService.generateAuthTokens(user);
     res.status(httpStatus.CREATED).send({ user, tokens });

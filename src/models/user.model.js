@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
+const { Organization } = require('./index');
 
 const userSchema = mongoose.Schema(
   {
@@ -42,6 +43,10 @@ const userSchema = mongoose.Schema(
     projects: {
       type: [mongoose.SchemaTypes.ObjectId],
       ref: 'Project',
+    },
+    orgId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Organization',
     },
     role: {
       type: String,

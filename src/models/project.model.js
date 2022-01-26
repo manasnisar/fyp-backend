@@ -12,7 +12,7 @@ const projectSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
-    pin: {
+    key: {
       type: String,
       required: true,
       unique: true,
@@ -20,6 +20,7 @@ const projectSchema = mongoose.Schema(
     },
     category: {
       type: String,
+      enum: ['DEV', 'OPS'],
       required: true,
       trim: true,
     },
