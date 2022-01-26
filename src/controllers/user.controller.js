@@ -41,7 +41,6 @@ const currentUser = catchAsync(async (req, res) => {
       projectId: 62131,
     },
   });
-  return;
 });
 
 const deleteUser = catchAsync(async (req, res) => {

@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 // const pick = require('../utils/pick');
-const ApiError = require('../utils/ApiError');
+// const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { projectService } = require('../services');
 
@@ -182,12 +182,12 @@ const getProjectById = catchAsync(async (req, res) => {
       ],
     },
   });
-  return;
-  const project = await projectService.getProject(req.params.projectId);
-  if (!project) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Project not found');
-  }
-  res.send(project);
+
+  // const project = await projectService.getProject(req.params.projectId);
+  // if (!project) {
+  //   throw new ApiError(httpStatus.NOT_FOUND, 'Project not found');
+  // }
+  // res.send(project);
 });
 
 const updateProjectById = catchAsync(async (req, res) => {

@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 // const pick = require('../utils/pick');
-const ApiError = require('../utils/ApiError');
+// const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { issueService } = require('../services');
 
@@ -60,12 +60,12 @@ const getIssueById = catchAsync(async (req, res) => {
       userIds: [],
     },
   });
-  return
-  const issue = await issueService.getIssue(req.params.issueId);
-  if (!issue) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Issue not found');
-  }
-  res.send(issue);
+
+  // const issue = await issueService.getIssue(req.params.issueId);
+  // if (!issue) {
+  //   throw new ApiError(httpStatus.NOT_FOUND, 'Issue not found');
+  // }
+  // res.send(issue);
 });
 
 const updateIssueById = catchAsync(async (req, res) => {
