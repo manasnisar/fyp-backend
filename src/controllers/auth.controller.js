@@ -1,12 +1,13 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService, organizationService } = require('../services');
+const getRandomAvatarUrl = require('../utils/getRandomAvatarUrl');
 
 const register = catchAsync(async (req, res) => {
   let user;
   try {
     const orgExist = await organizationService.orgExists(req.body.organization);
-
+    req.body.avatarUrl = getRandomAvatarUrl();
     if (req.body.role === 'member') {
       if (!orgExist) {
         res.status(httpStatus.NOT_FOUND).send('Organization not found!');

@@ -19,10 +19,25 @@ const createOrganization = async (data) => {
 
 const addMemberToOrgByID = async (data) => {
   const org = await Organization.findOneAndUpdate(
-    { name: data.name },
+    { _id: data.orgId },
     {
       $addToSet: {
-        memberIds: data.member,
+        members: data.member,
+      },
+    },
+    { useFindAndModify: true, new: true }
+  );
+  if (!org) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Organization not found!');
+  }
+};
+
+const addProjectToOrgById = async (data) => {
+  const org = await Organization.findOneAndUpdate(
+    { _id: data.orgId },
+    {
+      $addToSet: {
+        projects: data.project,
       },
     },
     { useFindAndModify: true, new: true }
@@ -42,4 +57,5 @@ module.exports = {
   createOrganization,
   addMemberToOrgByID,
   orgExists,
+  addProjectToOrgById,
 };

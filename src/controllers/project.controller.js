@@ -3,16 +3,24 @@ const httpStatus = require('http-status');
 // const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { projectService } = require('../services');
+const { addProjectToOrgById } = require('../services/organization.service');
 
 const createProject = catchAsync(async (req, res) => {
-  const project = await projectService.createProject(req.body);
-  res.status(httpStatus.CREATED).send(project);
+  try {
+    console.log(req.body)
+    const project = await projectService.createProject(req.body);
+    await addProjectToOrgById({
+      orgId: req.params.orgId,
+      project: project._id,
+    });
+    res.status(httpStatus.CREATED).send(project);
+  } catch (e) {
+    console.error(e)
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Project creation failed!');
+  }
 });
 
 const getProjectsForOrganization = catchAsync(async (req, res) => {
-  //   const filter = pick(req.query, ['name', 'role']);
-  //   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  //   const result = await projectService.getProjectsForOrganization(filter, options);
   const result = await projectService.getProjectsForOrganization(req.params.orgId);
   res.send(result);
 });

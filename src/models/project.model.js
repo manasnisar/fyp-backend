@@ -20,7 +20,7 @@ const projectSchema = mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ['DEV', 'OPS'],
+      enum: ['development', 'operations'],
       required: true,
       trim: true,
     },
@@ -30,6 +30,10 @@ const projectSchema = mongoose.Schema(
     },
     members: {
       type: [mongoose.SchemaTypes.ObjectId],
+    },
+    projectLead: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User',
     },
     totalIssues: {
       type: Number,

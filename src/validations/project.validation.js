@@ -4,9 +4,10 @@ const { objectId } = require('./custom.validation');
 const createProject = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    pin: Joi.string().required(),
-    organization: Joi.required().custom(objectId),
-    timeCreated: Joi.string().required().isoDate(),
+    category: Joi.string().valid('development', 'operations'),
+    key: Joi.string().required(),
+    description: Joi.string().required(),
+    projectLead: Joi.required(),
   }),
 };
 

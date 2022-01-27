@@ -15,12 +15,12 @@ const orgSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    projectIds: {
+    projects: {
       type: [mongoose.SchemaTypes.ObjectId],
       ref: 'Project',
       required: true,
     },
-    memberIds: {
+    members: {
       type: [mongoose.SchemaTypes.ObjectId],
       ref: 'User',
     },

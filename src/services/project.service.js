@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Project } = require('../models');
+const { Project, Organization } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createProject = async (projectBody) => {
@@ -10,8 +10,16 @@ const createProject = async (projectBody) => {
 };
 
 const getProjectsForOrganization = async (orgId) => {
-  const projects = await Project.find({ organizationId: orgId });
-  return projects;
+  return Organization.findById(orgId)
+    .populate('members')
+    .populate('owner')
+    .populate({
+      path: 'projects',
+      populate: {
+        path: 'projectLead',
+        select: { name: 1 },
+      },
+    });
 };
 
 const getProjectById = async (id) => {
