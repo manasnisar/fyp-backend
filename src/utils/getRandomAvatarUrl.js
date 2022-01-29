@@ -32,9 +32,7 @@ const images = [
 ];
 
 const getRandomAvatarUrl = () => {
-  const randNum = Math.floor(Math.random() * 31);
-  const url = `https://picsum.photos/id/${images[randNum]}/200/300`;
-  return url;
+  return `https://picsum.photos/id/${images[Math.floor(Math.random() * 31)]}/50/50`;
 };
 
 module.exports = getRandomAvatarUrl;

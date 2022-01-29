@@ -3,9 +3,11 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { epicService } = require('../services');
+const { Project } = require('../models');
 
 const createEpic = catchAsync(async (req, res) => {
   const epic = await epicService.createEpic(req.body);
+  await Project.findOneAndUpdate({ _id: epic.projectId }, { $inc: { totalEpics: 1 } });
   res.status(httpStatus.CREATED).send(epic);
 });
 

@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Project, Organization } = require('../models');
+const { Project, Organization, Issue, Epic } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createProject = async (projectBody) => {
@@ -23,7 +23,23 @@ const getProjectsForOrganization = async (orgId) => {
 };
 
 const getProjectById = async (id) => {
-  return Project.findById(id);
+  const project = await Project.findById(id).populate('members').populate('projectLead');
+  const epics = await Epic.find({ projectId: id });
+  const epicIds = epics.map((epic) => {
+    return epic._id;
+  });
+  const issues = await Issue.find({ epicId: { $in: epicIds } });
+  const users = project.members;
+  users.push(project.projectLead);
+  const result = {
+    project: {
+      ...project._doc,
+      epics,
+      issues,
+      users,
+    },
+  };
+  return result;
 };
 
 const updateProjectById = async (projectId, updateBody) => {

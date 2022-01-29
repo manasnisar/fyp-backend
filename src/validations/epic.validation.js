@@ -3,10 +3,10 @@ const { objectId } = require('./custom.validation');
 
 const createEpic = {
   body: Joi.object().keys({
-    name: Joi.string().required(),
-    pin: Joi.string().required(),
-    type: Joi.string().required().valid('epic', 'story'),
+    title: Joi.string().required(),
+    key: Joi.string().required(),
     projectId: Joi.required().custom(objectId),
+    priority: Joi.string().required(),
     description: Joi.string(),
   }),
 };

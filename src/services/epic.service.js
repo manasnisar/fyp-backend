@@ -3,9 +3,6 @@ const { Epic } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createEpic = async (epicBody) => {
-  if (await Epic.isNameTaken(epicBody.name, epicBody.projectId)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Epic name already taken');
-  }
   return Epic.create(epicBody);
 };
 

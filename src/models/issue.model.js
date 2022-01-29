@@ -12,7 +12,7 @@ const issueSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
-    pin: {
+    key: {
       type: String,
       required: true,
       unique: true,
@@ -30,13 +30,17 @@ const issueSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['ICE BOX', 'BLOCKED', 'IN PROGRESS', 'TESTING', 'DONE'],
-      default: 'ICE BOX',
+      enum: ['ready', 'blocked', 'inProgress', 'inQa', 'done', 'unplanned', 'planned'],
+      default: 'unplanned',
+    },
+    priority: {
+      type: String,
+      enum: ['1', '2', '3', '4', '5'],
+      default: '5',
     },
     assigneeId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
-      required: true,
     },
     reporterId: {
       type: mongoose.SchemaTypes.ObjectId,

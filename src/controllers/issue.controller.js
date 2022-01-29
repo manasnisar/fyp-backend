@@ -3,9 +3,11 @@ const httpStatus = require('http-status');
 // const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { issueService } = require('../services');
+const { Epic } = require('../models');
 
 const createIssue = catchAsync(async (req, res) => {
   const issue = await issueService.createIssue(req.body);
+  await Epic.findOneAndUpdate({ _id: issue.epicId }, { $inc: { totalIssues: 1 } });
   res.status(httpStatus.CREATED).send(issue);
 });
 

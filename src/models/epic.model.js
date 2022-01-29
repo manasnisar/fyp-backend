@@ -3,16 +3,21 @@ const { toJSON, paginate } = require('./plugins');
 
 const epicSchema = mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
       trim: true,
     },
-    pin: {
+    key: {
       type: String,
       required: true,
       unique: true,
       trim: true,
+    },
+    priority: {
+      type: String,
+      enum: ['1', '2', '3', '4', '5'],
+      default: '5',
     },
     projectId: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -28,6 +33,10 @@ const epicSchema = mongoose.Schema(
       enum: ['backlog', 'active'],
       default: 'backlog',
     },
+    totalIssues: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -37,11 +46,6 @@ const epicSchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 epicSchema.plugin(toJSON);
 epicSchema.plugin(paginate);
-
-epicSchema.statics.isNameTaken = async function (name, projectId) {
-  const project = await this.findOne({ name, projectId });
-  return !!project;
-};
 
 const Epic = mongoose.model('Epic', epicSchema);
 
