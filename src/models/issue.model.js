@@ -30,7 +30,7 @@ const issueSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['ready', 'blocked', 'inProgress', 'inQa', 'done', 'unplanned', 'planned'],
+      enum: ['ready', 'blocked', 'inProgress', 'inQa', 'done', 'unplanned', 'planned', 'archived'],
       default: 'unplanned',
     },
     estimate: {
