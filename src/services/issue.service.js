@@ -1,32 +1,31 @@
-const httpStatus = require('http-status');
 const { Issue } = require('../models');
-const ApiError = require('../utils/ApiError');
 
 const createIssue = async (epicBody) => {
   return Issue.create(epicBody);
 };
 
 const getIssuesForEpic = async (epicId) => {
-  const issue = await Issue.find({ epicId });
-  return issue;
+  return Issue.find({ epicId });
 };
 
 const getIssueById = async (id) => {
-  return Issue.findById(id).populate('comments').populate('assignee').populate('reporter');
+  return Issue.findById(id)
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'user',
+      },
+    })
+    .populate('assignee')
+    .populate('reporter');
 };
 
 const updateIssueById = async (issueId, updateBody) => {
-  const issue = Issue.findOneAndUpdate({ _id: issueId }, updateBody, { new: true, useFindAndModify: true });
-  return issue;
+  return Issue.findOneAndUpdate({ _id: issueId }, updateBody, { new: true, useFindAndModify: true });
 };
 
-const deleteIssueById = async (epicId) => {
-  const epic = await getIssueById(epicId);
-  if (!epic) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Issue not found');
-  }
-  await epic.remove();
-  return epic;
+const deleteIssueById = async (issueId) => {
+  await Issue.remove({ _id: issueId });
 };
 
 module.exports = {

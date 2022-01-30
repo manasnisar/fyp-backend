@@ -1,5 +1,15 @@
 const allRoles = {
-  member: ['checkAuth', 'getIssues', 'getProjects', 'createProject', 'createEpic', 'createIssue', 'manageIssues'],
+  member: [
+    'checkAuth',
+    'getIssues',
+    'getProjects',
+    'createProject',
+    'createEpic',
+    'createIssue',
+    'manageIssues',
+    'createComment',
+    'manageComments',
+  ],
   owner: [
     'getUsers',
     'manageUsers',
@@ -10,6 +20,8 @@ const allRoles = {
     'createEpic',
     'createIssue',
     'manageIssues',
+    'createComment',
+    'manageComments',
   ],
 };
 

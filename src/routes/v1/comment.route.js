@@ -10,7 +10,7 @@ router.route('/').post(auth('createComment'), validate(commentValidation.createC
 
 router
   .route('/:commentId')
-  .patch(auth('manageComments'), validate(commentValidation.updateComment), commentController.updateComment)
-  .delete(auth('manageEpics'), validate(commentValidation.deleteComment), commentController.deleteComment);
+  .put(auth('manageComments'), validate(commentValidation.updateComment), commentController.updateComment)
+  .delete(auth('manageComments'), validate(commentValidation.deleteComment), commentController.deleteComment);
 
 module.exports = router;

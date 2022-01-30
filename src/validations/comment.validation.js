@@ -5,7 +5,8 @@ const createComment = {
   body: Joi.object().keys({
     body: Joi.string().required(),
     issueId: Joi.required().custom(objectId),
-    user: Joi.required().custom(objectId),
+    userId: Joi.required().custom(objectId),
+    user: Joi.custom(objectId),
   }),
 };
 
