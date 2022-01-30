@@ -13,15 +13,11 @@ const createIssue = catchAsync(async (req, res) => {
 });
 
 const getIssuesForEpic = catchAsync(async (req, res) => {
-  //   const filter = pick(req.query, ['name', 'role']);
-  //   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  //   const result = await issueService.getIssuesForEpic(filter, options);
   const result = await issueService.getIssuesForEpic(req.params.epicId);
   res.send(result);
 });
 
 const getIssueById = catchAsync(async (req, res) => {
-
   const issue = await issueService.getIssueById(req.params.issueId);
   if (!issue) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Issue not found');
@@ -35,7 +31,7 @@ const updateIssueById = catchAsync(async (req, res) => {
 });
 
 const deleteIssueById = catchAsync(async (req, res) => {
-  await issueService.deleteIssue(req.params.issueId);
+  await issueService.deleteIssueById(req.params.issueId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
