@@ -33,6 +33,16 @@ const issueSchema = mongoose.Schema(
       enum: ['ready', 'blocked', 'inProgress', 'inQa', 'done', 'unplanned', 'planned'],
       default: 'unplanned',
     },
+    estimate: {
+      type: Number,
+    },
+    comments: {
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: 'Comment',
+    },
+    inProgressSince: {
+      type: Date,
+    },
     priority: {
       type: String,
       enum: ['1', '2', '3', '4', '5'],
@@ -47,6 +57,16 @@ const issueSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    assignee: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User',
+    },
+    reporter: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    creationDate: { type: Date, default: Date.now() },
   },
   {
     timestamps: true,

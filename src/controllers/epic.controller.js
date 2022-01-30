@@ -8,14 +8,17 @@ const { Project } = require('../models');
 const createEpic = catchAsync(async (req, res) => {
   const epic = await epicService.createEpic(req.body);
   await Project.findOneAndUpdate({ _id: epic.projectId }, { $inc: { totalEpics: 1 } });
+  if (!epic) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Epic not found');
+  }
   res.status(httpStatus.CREATED).send(epic);
 });
 
 const getEpicsForProject = catchAsync(async (req, res) => {
-  //   const filter = pick(req.query, ['name', 'role']);
-  //   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  //   const result = await epicService.getEpicsForProject(filter, options);
   const result = await epicService.getEpicsForProject(req.params.projectId);
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Epics not found');
+  }
   res.send(result);
 });
 

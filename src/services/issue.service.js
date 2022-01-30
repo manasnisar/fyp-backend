@@ -12,17 +12,12 @@ const getIssuesForEpic = async (epicId) => {
 };
 
 const getIssueById = async (id) => {
-  return Issue.findById(id);
+  return Issue.findById(id).populate('comments').populate('assignee').populate('reporter');
 };
 
-const updateIssueById = async (epicId, updateBody) => {
-  const epic = await getIssueById(epicId);
-  if (!epic) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Issue not found');
-  }
-  Object.assign(epic, updateBody);
-  await epic.save();
-  return epic;
+const updateIssueById = async (issueId, updateBody) => {
+  const issue = Issue.findOneAndUpdate({ _id: issueId }, updateBody, { new: true, useFindAndModify: true });
+  return issue;
 };
 
 const deleteIssueById = async (epicId) => {

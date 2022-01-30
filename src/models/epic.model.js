@@ -37,6 +37,7 @@ const epicSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    creationDate: { type: Date, default: Date.now() },
   },
   {
     timestamps: true,
