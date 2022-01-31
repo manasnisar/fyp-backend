@@ -40,8 +40,11 @@ const issueSchema = mongoose.Schema(
       type: [mongoose.SchemaTypes.ObjectId],
       ref: 'Comment',
     },
-    inProgressSince: {
-      type: Date,
+    timeSpent: {
+      type: Number,
+    },
+    timeRemaining: {
+      type: Number,
     },
     priority: {
       type: String,
@@ -66,7 +69,7 @@ const issueSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    creationDate: { type: Date, default: Date.now() },
+    creationDate: { type: Date },
   },
   {
     timestamps: true,

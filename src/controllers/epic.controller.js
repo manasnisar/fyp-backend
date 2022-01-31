@@ -23,7 +23,7 @@ const getEpicsForProject = catchAsync(async (req, res) => {
 });
 
 const getEpicById = catchAsync(async (req, res) => {
-  const epic = await epicService.getEpic(req.params.epicId);
+  const epic = await epicService.getEpicById(req.params.epicId);
   if (!epic) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Epic not found');
   }
@@ -36,7 +36,7 @@ const updateEpicById = catchAsync(async (req, res) => {
 });
 
 const deleteEpicById = catchAsync(async (req, res) => {
-  await epicService.deleteEpic(req.params.epicId);
+  await epicService.deleteEpicById(req.params.epicId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

@@ -8,6 +8,7 @@ const createEpic = {
     projectId: Joi.required().custom(objectId),
     priority: Joi.string().required(),
     description: Joi.string(),
+    creationDate: Joi.date(),
   }),
 };
 

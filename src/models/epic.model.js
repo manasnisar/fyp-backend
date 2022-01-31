@@ -33,11 +33,15 @@ const epicSchema = mongoose.Schema(
       enum: ['backlog', 'active'],
       default: 'backlog',
     },
+    comments: {
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: 'Comment',
+    },
     totalIssues: {
       type: Number,
       default: 0,
     },
-    creationDate: { type: Date, default: Date.now() },
+    creationDate: { type: Date },
   },
   {
     timestamps: true,
