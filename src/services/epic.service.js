@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Epic } = require('../models');
+const { Epic, Issue } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createEpic = async (epicBody) => {
@@ -12,7 +12,7 @@ const getEpicsForProject = async (projectId) => {
 };
 
 const getEpicById = async (id) => {
-  return Epic.findById(id);
+  return Epic.findById(id).populate('comments');
 };
 
 const updateEpicById = async (epicId, updateBody) => {
@@ -24,17 +24,13 @@ const updateEpicById = async (epicId, updateBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Epic name already taken');
   }
   Object.assign(epic, updateBody);
-  await epic.save();
+  await Epic.save();
   return epic;
 };
 
 const deleteEpicById = async (epicId) => {
-  const epic = await getEpicById(epicId);
-  if (!epic) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Epic not found');
-  }
-  await epic.remove();
-  return epic;
+  await Issue.remove({ epicId });
+  await Epic.remove({ _id: epicId });
 };
 
 module.exports = {

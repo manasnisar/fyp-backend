@@ -9,6 +9,8 @@ const allRoles = {
     'manageIssues',
     'createComment',
     'manageComments',
+    'getEpics',
+    'manageEpics',
   ],
   owner: [
     'getUsers',
@@ -22,6 +24,8 @@ const allRoles = {
     'manageIssues',
     'createComment',
     'manageComments',
+    'getEpics',
+    'manageEpics',
   ],
 };
 
