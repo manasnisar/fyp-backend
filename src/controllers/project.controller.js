@@ -33,7 +33,7 @@ const getProjectById = catchAsync(async (req, res) => {
 });
 
 const updateProjectById = catchAsync(async (req, res) => {
-  const project = await projectService.updateProject(req.params.projectId, req.body);
+  const project = await projectService.updateProjectById(req.params.projectId, req.body);
   res.send(project);
 });
 

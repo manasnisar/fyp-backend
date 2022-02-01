@@ -17,8 +17,10 @@ const updateProject = {
   }),
   body: Joi.object()
     .keys({
-      name: Joi.string().required(),
-      pin: Joi.string().required(),
+      name: Joi.string(),
+      description: Joi.string().allow(''),
+      category: Joi.string().valid('development', 'operations'),
+      projectLead: Joi.custom(objectId),
     })
     .min(1),
 };
