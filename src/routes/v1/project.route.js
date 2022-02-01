@@ -18,7 +18,7 @@ router
 router
   .route('/manage/:projectId')
   .get(auth('getProjects'), projectController.getProjectById)
-  .patch(auth('manageProjects'), validate(projectValidation.updateProject), projectController.updateProjectById)
+  .put(auth('manageProjects'), validate(projectValidation.updateProject), projectController.updateProjectById)
   .delete(auth('manageProjects'), validate(projectValidation.deleteProject), projectController.deleteProjectById);
 
 module.exports = router;

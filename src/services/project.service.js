@@ -43,15 +43,7 @@ const getProjectById = async (id) => {
 };
 
 const updateProjectById = async (projectId, updateBody) => {
-  const project = await getProjectById(projectId);
-  if (!project) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Project not found');
-  }
-  if (await Project.isNameTaken(updateBody.name, updateBody.orgId)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Project name already taken');
-  }
-  Object.assign(project, updateBody);
-  await project.save();
+  const project = await Project.findOneAndUpdate({ _id: projectId }, updateBody, { new: true, useFindAndModify: true });
   return project;
 };
 
