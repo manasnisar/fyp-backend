@@ -53,8 +53,7 @@ const getProjectById = async (id) => {
     return result;
   } catch (e) {
     return e;
-  };
-
+  }
 };
 
 const updateProjectById = async (projectId, updateBody) => {
