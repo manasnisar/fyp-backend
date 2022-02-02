@@ -1,14 +1,11 @@
-const httpStatus = require('http-status');
 const { Epic, Issue } = require('../models');
-const ApiError = require('../utils/ApiError');
 
 const createEpic = async (epicBody) => {
   return Epic.create(epicBody);
 };
 
 const getEpicsForProject = async (projectId) => {
-  const epics = await Epic.find({ projectId });
-  return epics;
+  return Epic.find({ projectId });
 };
 
 const getEpicById = async (id) => {
@@ -16,7 +13,7 @@ const getEpicById = async (id) => {
 };
 
 const updateEpicById = async (epicId, updateBody) => {
-  return Epic.findOneAndUpdate({_id: epicId}, updateBody)
+  return Epic.findOneAndUpdate({ _id: epicId }, updateBody);
 };
 
 const deleteEpicById = async (epicId) => {
