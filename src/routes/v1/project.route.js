@@ -7,12 +7,12 @@ const projectController = require('../../controllers/project.controller');
 const router = express.Router();
 
 router
-  .route('/:orgId')
-  .get(
-    auth('getProjects'),
-    validate(projectValidation.getProjectsForOrganization),
-    projectController.getProjectsForOrganization
-  )
+  .route('/invite')
+  .post(auth('inviteMembers'), validate(projectValidation.inviteMember), projectController.inviteMemberToProject);
+
+router
+  .route('/:id')
+  .get(auth('getProjects'), validate(projectValidation.getProjectsForUser), projectController.getProjectsForUser)
   .post(auth('createProject'), validate(projectValidation.createProject), projectController.createProject);
 
 router

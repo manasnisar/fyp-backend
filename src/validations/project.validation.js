@@ -25,9 +25,9 @@ const updateProject = {
     .min(1),
 };
 
-const getProjectsForOrganization = {
+const getProjectsForUser = {
   params: Joi.object().keys({
-    orgId: Joi.string().custom(objectId),
+    id: Joi.string().custom(objectId).required(),
   }),
 };
 
@@ -36,10 +36,19 @@ const deleteProject = {
     projectId: Joi.string().custom(objectId),
   }),
 };
+const inviteMember = {
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    projectId: Joi.string().custom(objectId),
+    orgId: Joi.string().custom(objectId),
+    invitationCode: Joi.string().length(6).required(),
+  }),
+};
 
 module.exports = {
   createProject,
   updateProject,
-  getProjectsForOrganization,
+  getProjectsForUser,
   deleteProject,
+  inviteMember,
 };

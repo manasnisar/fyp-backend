@@ -8,6 +8,7 @@ const register = {
     organization: Joi.string().trim(),
     role: Joi.string().trim(),
     name: Joi.string().trim().required(),
+    invitationCode: Joi.string().length(6),
   }),
 };
 

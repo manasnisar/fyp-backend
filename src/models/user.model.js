@@ -46,6 +46,7 @@ const userSchema = mongoose.Schema(
     orgId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Organization',
+      required: true,
     },
     role: {
       type: String,

@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Project, Organization, Issue, Epic } = require('../models');
+const { Project, Organization, Issue, Epic, Invitation, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createProject = async (projectBody) => {
@@ -9,17 +9,28 @@ const createProject = async (projectBody) => {
   return Project.create(projectBody);
 };
 
-const getProjectsForOrganization = async (orgId) => {
-  return Organization.findById(orgId)
-    .populate('members')
-    .populate('owner')
-    .populate({
+const getProjectsForUser = async (id) => {
+  const user = await User.findById(id);
+  let query;
+  if (user.role === 'owner') {
+    query = {
       path: 'projects',
       populate: {
         path: 'projectLead',
         select: { name: 1 },
       },
-    });
+    };
+  } else {
+    query = {
+      path: 'projects',
+      populate: {
+        path: 'projectLead',
+        select: { name: 1 },
+      },
+      match: { _id: { $in: user.projects } },
+    };
+  }
+  return Organization.findById(user.orgId).populate('members').populate('owner').populate(query);
 };
 
 const getProjectById = async (id) => {
@@ -56,10 +67,15 @@ const deleteProjectById = async (projectId) => {
   return project;
 };
 
+const inviteMember = async (invitationBody) => {
+  return Invitation.create(invitationBody);
+};
+
 module.exports = {
   createProject,
-  getProjectsForOrganization,
+  getProjectsForUser,
   getProjectById,
   updateProjectById,
   deleteProjectById,
+  inviteMember,
 };

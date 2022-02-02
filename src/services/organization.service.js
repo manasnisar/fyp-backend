@@ -48,8 +48,11 @@ const addProjectToOrgById = async (data) => {
 };
 
 const orgExists = async (name) => {
-  const check = await Organization.exists({ name });
-  return check;
+  const org = await Organization.findOne({ name });
+  if (org) {
+    return org;
+  }
+  return false;
 };
 
 module.exports = {
