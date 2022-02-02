@@ -1,28 +1,39 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService, organizationService } = require('../services');
-const getRandomAvatarUrl = require('../utils/getRandomAvatarUrl');
+const { Invitation, User } = require('../models');
 
 const register = catchAsync(async (req, res) => {
   let user;
   try {
-    const orgExist = await organizationService.orgExists(req.body.organization);
-    req.body.avatarUrl = getRandomAvatarUrl();
+    const org = await organizationService.orgExists(req.body.organization);
     if (req.body.role === 'member') {
-      if (!orgExist) {
+      if (!org) {
         res.status(httpStatus.NOT_FOUND).send('Organization not found!');
         return;
       }
+      const invitation = await Invitation.findOne({
+        invitationCode: req.body.invitationCode,
+        email: req.body.email,
+        orgId: org._id,
+      });
+      if (!invitation) {
+        res.status(httpStatus.NOT_FOUND).send('Invalid invite code!');
+        return;
+      }
+      req.body.orgId = org._id;
       user = await userService.createUser(req.body);
-      await organizationService.addMemberToOrgByID({ name: req.body.organization, member: user._id });
+      user = await User.findOneAndUpdate({ _id: user._id }, { $push: { projects: invitation.projectId } });
+      await organizationService.addMemberToOrgByID({ orgId: org._id, member: user._id });
+      await Invitation.remove({ _id: invitation._id });
     } else if (req.body.role === 'owner') {
-      if (orgExist) {
+      if (org) {
         res.status(httpStatus.BAD_REQUEST).send('Organization already exists!');
         return;
       }
       user = await userService.createUser(req.body);
-      const org = await organizationService.createOrganization({ name: req.body.organization, owner: user._id });
-      user = await userService.updateUserById(user._id, { orgId: org._id });
+      const newOrg = await organizationService.createOrganization({ name: req.body.organization, owner: user._id });
+      user = await userService.updateUserById(user._id, { orgId: newOrg._id });
     }
     const tokens = await tokenService.generateAuthTokens(user);
     res.status(httpStatus.CREATED).send({ user, tokens });

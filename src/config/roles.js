@@ -12,6 +12,7 @@ const allRoles = {
     'getEpics',
     'manageEpics',
     'manageProjects',
+    'inviteMembers',
   ],
   owner: [
     'getUsers',
@@ -28,6 +29,7 @@ const allRoles = {
     'getEpics',
     'manageEpics',
     'manageProjects',
+    'inviteMembers',
   ],
 };
 

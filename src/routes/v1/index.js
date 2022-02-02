@@ -5,7 +5,7 @@ const organizationRoute = require('./organization.route');
 const projectRoute = require('./project.route');
 const epicRoute = require('./epic.route');
 const issueRoute = require('./issue.route');
-const commentRoute = require('./comment.route')
+const commentRoute = require('./comment.route');
 
 // const config = require('../../config/config');
 

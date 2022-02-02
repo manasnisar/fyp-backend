@@ -3,12 +3,18 @@ const catchAsync = require('../utils/catchAsync');
 const { projectService } = require('../services');
 const { addProjectToOrgById } = require('../services/organization.service');
 const ApiError = require('../utils/ApiError');
+const { User } = require('../models');
 
 const createProject = catchAsync(async (req, res) => {
   try {
     const project = await projectService.createProject(req.body);
+    const owner = await User.findOne({ role: 'owner', orgId: req.params.id });
+    if (!owner._id.equals(project.projectLead)) {
+      await User.findOneAndUpdate({ role: 'owner', orgId: req.params.id }, { $push: { projects: project._id } });
+    }
+    await User.findOneAndUpdate({ _id: project.projectLead }, { $push: { projects: project._id } });
     await addProjectToOrgById({
-      orgId: req.params.orgId,
+      orgId: req.params.id,
       project: project._id,
     });
     res.status(httpStatus.CREATED).send(project);
@@ -17,8 +23,8 @@ const createProject = catchAsync(async (req, res) => {
   }
 });
 
-const getProjectsForOrganization = catchAsync(async (req, res) => {
-  const result = await projectService.getProjectsForOrganization(req.params.orgId);
+const getProjectsForUser = catchAsync(async (req, res) => {
+  const result = await projectService.getProjectsForUser(req.params.id);
   res.send(result);
 });
 
@@ -28,10 +34,12 @@ const getProjectById = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Project not found');
   }
   res.send(project);
-
-
 });
 
+const inviteMemberToProject = catchAsync(async (req, res) => {
+  const invitation = await projectService.inviteMember(req.body);
+  res.send(invitation);
+});
 const updateProjectById = catchAsync(async (req, res) => {
   const project = await projectService.updateProjectById(req.params.projectId, req.body);
   res.send(project);
@@ -44,8 +52,9 @@ const deleteProjectById = catchAsync(async (req, res) => {
 
 module.exports = {
   createProject,
-  getProjectsForOrganization,
+  getProjectsForUser,
   getProjectById,
   updateProjectById,
   deleteProjectById,
+  inviteMemberToProject,
 };
