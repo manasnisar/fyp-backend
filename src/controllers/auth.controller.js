@@ -25,7 +25,6 @@ const register = catchAsync(async (req, res) => {
       req.body.avatarUrl = getRandomAvatarUrl();
       req.body.orgId = org._id;
       user = await userService.createUser(req.body);
-      console.log(invitation)
       user = await User.findOneAndUpdate({ _id: user._id }, { $push: { projects: invitation.projectId } });
       await organizationService.addMemberToOrgByID({ orgId: org._id, member: user._id });
       await Invitation.remove({ _id: invitation._id });
@@ -41,7 +40,6 @@ const register = catchAsync(async (req, res) => {
     const tokens = await tokenService.generateAuthTokens(user);
     res.status(httpStatus.CREATED).send({ user, tokens });
   } catch (e) {
-    console.log(e)
     res.status(e.statusCode).send(e.message);
   }
 });
