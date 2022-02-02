@@ -3,10 +3,16 @@ const catchAsync = require('../utils/catchAsync');
 const { projectService } = require('../services');
 const { addProjectToOrgById } = require('../services/organization.service');
 const ApiError = require('../utils/ApiError');
+const { User } = require('../models');
 
 const createProject = catchAsync(async (req, res) => {
   try {
     const project = await projectService.createProject(req.body);
+    const owner = await User.findOne({ role: 'owner', orgId: req.params.id });
+    if (!owner._id.equals(project.projectLead)) {
+      await User.findOneAndUpdate({ role: 'owner', orgId: req.params.id }, { $push: { projects: project._id } });
+    }
+    await User.findOneAndUpdate({ _id: project.projectLead }, { $push: { projects: project._id } });
     await addProjectToOrgById({
       orgId: req.params.id,
       project: project._id,

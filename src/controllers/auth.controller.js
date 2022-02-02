@@ -1,7 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService, organizationService } = require('../services');
-const getRandomAvatarUrl = require('../utils/getRandomAvatarUrl');
 const { Invitation, User } = require('../models');
 
 const register = catchAsync(async (req, res) => {
@@ -22,7 +21,6 @@ const register = catchAsync(async (req, res) => {
         res.status(httpStatus.NOT_FOUND).send('Invalid invite code!');
         return;
       }
-      req.body.avatarUrl = getRandomAvatarUrl();
       req.body.orgId = org._id;
       user = await userService.createUser(req.body);
       user = await User.findOneAndUpdate({ _id: user._id }, { $push: { projects: invitation.projectId } });

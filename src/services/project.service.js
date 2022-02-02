@@ -34,23 +34,27 @@ const getProjectsForUser = async (id) => {
 };
 
 const getProjectById = async (id) => {
-  const project = await Project.findById(id).populate('members').populate('projectLead');
-  const epics = await Epic.find({ projectId: id });
-  const epicIds = epics.map((epic) => {
-    return epic._id;
-  });
-  const issues = await Issue.find({ epicId: { $in: epicIds } });
-  const users = project.members;
-  users.push(project.projectLead);
-  const result = {
-    project: {
-      ...project._doc,
-      epics,
-      issues,
-      users,
-    },
+  try {
+    const project = await Project.findById(id).populate('projectLead');
+    const epics = await Epic.find({ projectId: id });
+    const epicIds = epics.map((epic) => {
+      return epic._id;
+    });
+    const issues = await Issue.find({ epicId: { $in: epicIds } });
+    const users = await User.find({ projects: project._id });
+    const result = {
+      project: {
+        ...project._doc,
+        epics,
+        issues,
+        users,
+      },
+    };
+    return result;
+  } catch (e) {
+    return e;
   };
-  return result;
+
 };
 
 const updateProjectById = async (projectId, updateBody) => {
@@ -68,6 +72,22 @@ const deleteProjectById = async (projectId) => {
 };
 
 const inviteMember = async (invitationBody) => {
+  let user = await User.findOne({ email: invitationBody.email, projects: invitationBody.projectId });
+  if (user) {
+    throw new ApiError(httpStatus.CONFLICT, 'Already a member!');
+  }
+  user = await User.findOne({ email: invitationBody.email, orgId: invitationBody.orgId });
+  if (user) {
+    await User.findOneAndUpdate(
+      { email: invitationBody.email, orgId: invitationBody.orgId },
+      { $push: { projects: invitationBody.projectId } }
+    );
+    return;
+  }
+  user = await User.findOne({ email: invitationBody.email });
+  if (user) {
+    throw new ApiError(httpStatus.CONFLICT, 'User is a part of different organization!');
+  }
   return Invitation.create(invitationBody);
 };
 
