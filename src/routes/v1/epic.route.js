@@ -14,7 +14,7 @@ router
 router
   .route('/manage/:epicId')
   .get(auth('getEpics'), epicController.getEpicById)
-  .patch(auth('manageEpics'), validate(epicValidation.updateEpic), epicController.updateEpicById)
+  .put(auth('manageEpics'), validate(epicValidation.updateEpic), epicController.updateEpicById)
   .delete(auth('manageEpics'), validate(epicValidation.deleteEpic), epicController.deleteEpicById);
 
 module.exports = router;

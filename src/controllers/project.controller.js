@@ -46,7 +46,7 @@ const updateProjectById = catchAsync(async (req, res) => {
 });
 
 const deleteProjectById = catchAsync(async (req, res) => {
-  await projectService.deleteProject(req.params.projectId);
+  await projectService.deleteProjectById(req.params.projectId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

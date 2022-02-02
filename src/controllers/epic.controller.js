@@ -31,7 +31,7 @@ const getEpicById = catchAsync(async (req, res) => {
 });
 
 const updateEpicById = catchAsync(async (req, res) => {
-  const epic = await epicService.updateEpic(req.params.epicId, req.body);
+  const epic = await epicService.updateEpicById(req.params.epicId, req.body);
   res.send(epic);
 });
 

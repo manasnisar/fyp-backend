@@ -16,16 +16,7 @@ const getEpicById = async (id) => {
 };
 
 const updateEpicById = async (epicId, updateBody) => {
-  const epic = await getEpicById(epicId);
-  if (!epic) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Epic not found');
-  }
-  if (await Epic.isNameTaken(updateBody.name, updateBody.projectId)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Epic name already taken');
-  }
-  Object.assign(epic, updateBody);
-  await Epic.save();
-  return epic;
+  return Epic.findOneAndUpdate({_id: epicId}, updateBody)
 };
 
 const deleteEpicById = async (epicId) => {

@@ -7,7 +7,7 @@ const createEpic = {
     key: Joi.string().required(),
     projectId: Joi.required().custom(objectId),
     priority: Joi.string().required(),
-    description: Joi.string(),
+    description: Joi.string().allow(''),
     creationDate: Joi.date(),
   }),
 };
@@ -18,9 +18,8 @@ const updateEpic = {
   }),
   body: Joi.object()
     .keys({
-      name: Joi.string().required(),
-      pin: Joi.string().required(),
-      type: Joi.string().required(),
+      title: Joi.string(),
+      priority: Joi.string(),
       description: Joi.string(),
     })
     .min(1),

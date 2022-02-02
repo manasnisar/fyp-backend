@@ -62,12 +62,14 @@ const updateProjectById = async (projectId, updateBody) => {
 };
 
 const deleteProjectById = async (projectId) => {
-  const project = await getProjectById(projectId);
-  if (!project) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Project not found');
-  }
-  await project.remove();
-  return project;
+  const epics = await Epic.find({ projectId });
+  const epicIds = epics.map((epic) => epic._id);
+  await Issue.remove({ epicId: { $in: epicIds } });
+  await Epic.remove({ projectId });
+  await User.updateOne({ projects: projectId }, { $pull: { projects: projectId } });
+  await Organization.updateOne({ projects: projectId }, { $pull: { projects: projectId } });
+  await Invitation.remove({ projectId });
+  await Project.remove({ _id: projectId });
 };
 
 const inviteMember = async (invitationBody) => {
