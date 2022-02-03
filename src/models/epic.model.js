@@ -19,6 +19,10 @@ const epicSchema = mongoose.Schema(
       enum: ['1', '2', '3', '4', '5'],
       default: '5',
     },
+    comments: {
+      type: [mongoose.SchemaTypes.ObjectId],
+      ref: 'Comment',
+    },
     projectId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Project',
