@@ -56,6 +56,7 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    creationDate: { type: Date },
   },
   {
     timestamps: true,

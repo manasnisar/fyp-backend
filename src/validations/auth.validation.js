@@ -9,6 +9,7 @@ const register = {
     role: Joi.string().trim(),
     name: Joi.string().trim().required(),
     invitationCode: Joi.string().length(6),
+    creationDate: Joi.date().required(),
   }),
 };
 
