@@ -92,6 +92,40 @@ const inviteMember = async (invitationBody) => {
   return Invitation.create(invitationBody);
 };
 
+const startSprint = async (projectId, noOfWeeks) => {
+  let timeInFuture = 1.21e9;
+  if (noOfWeeks === 3) timeInFuture = 1.814e9;
+  if (noOfWeeks === 4) timeInFuture = 2.419e9;
+  const epicIds = (await Epic.find({ projectId }, { _id: 1 })).map((epic) => epic._id);
+  await Issue.updateMany({ epicId: { $in: epicIds }, status: 'planned' }, { status: 'ready' });
+  await Issue.updateMany(
+    {
+      epicId: { $in: epicIds },
+      previousSprintStatus: { $in: ['ready', 'blocked', 'inProgress', 'inQa'] },
+    },
+    [{ $set: { status: '$previousSprintStatus', previousSprintStatus: null } }]
+  );
+  await Project.findByIdAndUpdate(projectId, {
+    sprintStatus: 'active',
+    sprintStartDate: Date.now(),
+    sprintEndDate: Date.now() + timeInFuture,
+    $inc: { sprintNumber: 1 },
+  });
+};
+
+const endSprint = async (projectId) => {
+  const epicIds = (await Epic.find({ projectId }, { _id: 1 })).map((epic) => epic._id);
+  await Issue.updateMany({ epicId: { $in: epicIds }, status: 'done' }, { status: 'archived' });
+  await Issue.updateMany({ epicId: { $in: epicIds }, status: { $in: ['ready', 'blocked', 'inProgress', 'inQa'] } }, [
+    { $set: { previousSprintStatus: '$status', status: 'planned' } },
+  ]);
+  await Project.findByIdAndUpdate(projectId, {
+    sprintStatus: 'inactive',
+    sprintStartDate: null,
+    SprintEndDate: null,
+  });
+};
+
 module.exports = {
   createProject,
   getProjectsForUser,
@@ -99,4 +133,6 @@ module.exports = {
   updateProjectById,
   deleteProjectById,
   inviteMember,
+  startSprint,
+  endSprint,
 };

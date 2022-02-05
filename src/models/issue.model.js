@@ -33,6 +33,10 @@ const issueSchema = mongoose.Schema(
       enum: ['ready', 'blocked', 'inProgress', 'inQa', 'done', 'unplanned', 'planned', 'archived'],
       default: 'unplanned',
     },
+    previousSprintStatus: {
+      type: String,
+      enum: ['ready', 'blocked', 'inProgress', 'inQa'],
+    },
     estimate: {
       type: Number,
     },

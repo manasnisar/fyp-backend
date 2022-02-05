@@ -28,6 +28,22 @@ const projectSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    sprintStatus: {
+      type: String,
+      enum: ['active', 'inactive'],
+      default: 'inactive',
+      trim: true,
+    },
+    sprintStartDate: {
+      type: Date,
+    },
+    sprintEndDate: {
+      type: Date,
+    },
+    sprintNumber: {
+      type: Number,
+      default: 1,
+    },
     members: {
       type: [mongoose.SchemaTypes.ObjectId],
       ref: 'User',

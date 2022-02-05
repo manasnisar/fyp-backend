@@ -40,6 +40,7 @@ const inviteMemberToProject = catchAsync(async (req, res) => {
   const invitation = await projectService.inviteMember(req.body);
   res.send(invitation);
 });
+
 const updateProjectById = catchAsync(async (req, res) => {
   const project = await projectService.updateProjectById(req.params.projectId, req.body);
   res.send(project);
@@ -50,6 +51,16 @@ const deleteProjectById = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const startSprint = catchAsync(async (req, res) => {
+  await projectService.startSprint(req.params.projectId, req.body.noOfWeeks);
+  res.sendStatus(200);
+});
+
+const endSprint = catchAsync(async (req, res) => {
+  await projectService.endSprint(req.params.projectId);
+  res.sendStatus(200);
+});
+
 module.exports = {
   createProject,
   getProjectsForUser,
@@ -57,4 +68,6 @@ module.exports = {
   updateProjectById,
   deleteProjectById,
   inviteMemberToProject,
+  startSprint,
+  endSprint
 };

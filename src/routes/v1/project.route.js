@@ -16,6 +16,14 @@ router
   .post(auth('createProject'), validate(projectValidation.createProject), projectController.createProject);
 
 router
+  .route('/start_sprint/:projectId')
+  .post(auth('manageSprint'), validate(projectValidation.startSprint), projectController.startSprint);
+
+router
+  .route('/end_sprint/:projectId')
+  .get(auth('manageSprint'), validate(projectValidation.endSprint), projectController.endSprint);
+
+router
   .route('/manage/:projectId')
   .get(auth('getProjects'), projectController.getProjectById)
   .put(auth('manageProjects'), validate(projectValidation.updateProject), projectController.updateProjectById)

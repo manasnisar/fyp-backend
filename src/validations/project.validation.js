@@ -15,14 +15,12 @@ const updateProject = {
   params: Joi.object().keys({
     projectId: Joi.required().custom(objectId),
   }),
-  body: Joi.object()
-    .keys({
-      name: Joi.string(),
-      description: Joi.string().allow(''),
-      category: Joi.string().valid('development', 'operations'),
-      projectLead: Joi.custom(objectId),
-    })
-    .min(1),
+  body: Joi.object().keys({
+    name: Joi.string(),
+    description: Joi.string().allow(''),
+    category: Joi.string().valid('development', 'operations'),
+    projectLead: Joi.custom(objectId),
+  }),
 };
 
 const getProjectsForUser = {
@@ -33,9 +31,25 @@ const getProjectsForUser = {
 
 const deleteProject = {
   params: Joi.object().keys({
-    projectId: Joi.string().custom(objectId),
+    projectId: Joi.string().custom(objectId).required(),
   }),
 };
+
+const startSprint = {
+  params: Joi.object().keys({
+    projectId: Joi.string().custom(objectId).required(),
+  }),
+  body: Joi.object().keys({
+    noOfWeeks: Joi.number().required(),
+  }),
+};
+
+const endSprint = {
+  params: Joi.object().keys({
+    projectId: Joi.string().custom(objectId).required(),
+  }),
+};
+
 const inviteMember = {
   body: Joi.object().keys({
     email: Joi.string().email().required(),
@@ -51,4 +65,6 @@ module.exports = {
   getProjectsForUser,
   deleteProject,
   inviteMember,
+  startSprint,
+  endSprint,
 };
