@@ -69,5 +69,5 @@ module.exports = {
   deleteProjectById,
   inviteMemberToProject,
   startSprint,
-  endSprint
+  endSprint,
 };
