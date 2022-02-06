@@ -13,15 +13,13 @@ const envVarsSchema = Joi.object()
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().default(120).description('minutes after which access tokens expire'),
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(30).description('days after which refresh tokens expire'),
     JWT_RESET_PASSWORD_EXPIRATION_MINUTES: Joi.number()
-      .default(10)
+      .default(30)
       .description('minutes after which reset password token expires'),
     JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.number()
-      .default(10)
+      .default(30)
       .description('minutes after which verify email token expires'),
-    SMTP_HOST: Joi.string().description('server that will send the emails'),
-    SMTP_PORT: Joi.number().description('port to connect to the email server'),
-    SMTP_USERNAME: Joi.string().description('username for email server'),
-    SMTP_PASSWORD: Joi.string().description('password for email server'),
+    MAILGUN_API_KEY: Joi.string().description('Mailgun API key'),
+    MAILGUN_DOMAIN: Joi.string().description('Mailgun sending domain'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
     CORS_ORIGINS: Joi.string().description('whitelisted domains'),
   })
@@ -52,14 +50,8 @@ module.exports = {
     verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
   },
   email: {
-    smtp: {
-      host: envVars.SMTP_HOST,
-      port: envVars.SMTP_PORT,
-      auth: {
-        user: envVars.SMTP_USERNAME,
-        pass: envVars.SMTP_PASSWORD,
-      },
-    },
+    mailgunApiKey: envVars.MAILGUN_API_KEY,
+    mailgunDomain: envVars.MAILGUN_DOMAIN,
     from: envVars.EMAIL_FROM,
   },
   corsOrigins: envVars.CORS_ORIGINS,

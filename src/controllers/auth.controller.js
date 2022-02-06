@@ -22,7 +22,7 @@ const register = catchAsync(async (req, res) => {
         return;
       }
       req.body.orgId = org._id;
-      user = await userService.createUser(req.body);
+      user = await userService.createUser({ ...req.body, isEmailVerified: true });
       user = await User.findOneAndUpdate({ _id: user._id }, { $push: { projects: invitation.projectId } });
       await organizationService.addMemberToOrgByID({ orgId: org._id, member: user._id });
       await Invitation.remove({ _id: invitation._id });
@@ -34,9 +34,10 @@ const register = catchAsync(async (req, res) => {
       user = await userService.createUser(req.body);
       const newOrg = await organizationService.createOrganization({ name: req.body.organization, owner: user._id });
       user = await userService.updateUserById(user._id, { orgId: newOrg._id });
+      const verifyEmailToken = await tokenService.generateVerifyEmailToken(user);
+      await emailService.sendVerificationEmail(user.email, verifyEmailToken);
     }
-    const tokens = await tokenService.generateAuthTokens(user);
-    res.status(httpStatus.CREATED).send({ user, tokens });
+    res.status(httpStatus.CREATED).send({ user });
   } catch (e) {
     res.status(e.statusCode).send(e.message);
   }
@@ -66,7 +67,7 @@ const forgotPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  await authService.resetPassword(req.query.token, req.body.password);
+  await authService.resetPassword(req.body.token, req.body.password);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
@@ -77,7 +78,7 @@ const sendVerificationEmail = catchAsync(async (req, res) => {
 });
 
 const verifyEmail = catchAsync(async (req, res) => {
-  await authService.verifyEmail(req.query.token);
+  await authService.verifyEmail(req.params.token);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

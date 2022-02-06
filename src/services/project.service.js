@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { Project, Organization, Issue, Epic, Invitation, User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { sendInvitationEmail } = require('./email.service');
 
 const createProject = async (projectBody) => {
   if (await Project.isNameTaken(projectBody.name, projectBody.orgId)) {
@@ -89,7 +90,14 @@ const inviteMember = async (invitationBody) => {
   if (user) {
     throw new ApiError(httpStatus.CONFLICT, 'User is a part of different organization!');
   }
-  return Invitation.create(invitationBody);
+  const invitation = await Invitation.create(invitationBody);
+  const project = await Project.findById(invitation.projectId);
+  try {
+    await sendInvitationEmail(invitation.email, invitation.invitationCode, project.name);
+  } catch (e) {
+    throw new Error(e);
+  }
+  return invitation;
 };
 
 const startSprint = async (projectId, noOfWeeks) => {
