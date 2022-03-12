@@ -9,7 +9,12 @@ const getEpicsForProject = async (projectId) => {
 };
 
 const getEpicById = async (id) => {
-  return Epic.findById(id).populate('comments');
+  return Epic.findById(id).populate({
+    path: 'comments',
+    populate: {
+      path: 'user',
+    },
+  });
 };
 
 const updateEpicById = async (epicId, updateBody) => {
