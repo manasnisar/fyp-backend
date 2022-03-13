@@ -42,7 +42,7 @@ const projectSchema = mongoose.Schema(
     },
     sprintNumber: {
       type: Number,
-      default: 1,
+      default: 0,
     },
     members: {
       type: [mongoose.SchemaTypes.ObjectId],

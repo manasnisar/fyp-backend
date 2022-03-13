@@ -92,8 +92,9 @@ const inviteMember = async (invitationBody) => {
   }
   const invitation = await Invitation.create(invitationBody);
   const project = await Project.findById(invitation.projectId);
+  const org = await Organization.findById(invitation.orgId);
   try {
-    await sendInvitationEmail(invitation.email, invitation.invitationCode, project.name);
+    await sendInvitationEmail(invitation.email, invitation.invitationCode, project.name, org.name);
   } catch (e) {
     throw new Error(e);
   }
