@@ -20,7 +20,9 @@ const envVarsSchema = Joi.object()
       .description('minutes after which verify email token expires'),
     MAILGUN_API_KEY: Joi.string().description('Mailgun API key'),
     MAILGUN_DOMAIN: Joi.string().description('Mailgun sending domain').default('mail.sharingan.me'),
-    EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app').default('Sharingan <mail@sharingan.me>'),
+    EMAIL_FROM: Joi.string()
+      .description('the from field in the emails sent by the app')
+      .default('Sharingan <mail@sharingan.me>'),
     CORS_ORIGINS: Joi.string().description('whitelisted domains').default('http://localhost:3000'),
   })
   .unknown();
