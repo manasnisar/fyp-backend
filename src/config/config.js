@@ -6,9 +6,9 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const envVarsSchema = Joi.object()
   .keys({
-    NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
-    PORT: Joi.number().default(3000),
-    MONGODB_URL: Joi.string().required().description('Mongo DB url'),
+    NODE_ENV: Joi.string().valid('production', 'development', 'test').default('development'),
+    PORT: Joi.number().default(5000),
+    MONGODB_URL: Joi.string().description('Mongo DB url').default('mongodb://localhost:27017/sharingan'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().default(120).description('minutes after which access tokens expire'),
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(30).description('days after which refresh tokens expire'),
@@ -19,9 +19,9 @@ const envVarsSchema = Joi.object()
       .default(30)
       .description('minutes after which verify email token expires'),
     MAILGUN_API_KEY: Joi.string().description('Mailgun API key'),
-    MAILGUN_DOMAIN: Joi.string().description('Mailgun sending domain'),
-    EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
-    CORS_ORIGINS: Joi.string().description('whitelisted domains'),
+    MAILGUN_DOMAIN: Joi.string().description('Mailgun sending domain').default('mail.sharingan.me'),
+    EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app').default('Sharingan <mail@sharingan.me>'),
+    CORS_ORIGINS: Joi.string().description('whitelisted domains').default('http://localhost:3000'),
   })
   .unknown();
 
