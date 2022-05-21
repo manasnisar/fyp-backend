@@ -1,20 +1,26 @@
 const Joi = require('joi');
+const { objectId } = require('./custom.validation');
 
 const readNotifications = {
-  body: Joi.object().keys({
-    notificationIds: Joi.array().required(),
+  params: Joi.object().keys({
+    notificationId: Joi.required().custom(objectId),
+  }),
+};
+
+const readAllNotifications = {
+  params: Joi.object().keys({
+    userId: Joi.required().custom(objectId),
   }),
 };
 
 const getNotifications = {
-  body: Joi.object()
-    .keys({
-      receiver: Joi.array().required(),
-    })
-    .min(1),
+  params: Joi.object().keys({
+    token: Joi.string().required(),
+  }),
 };
 
 module.exports = {
   readNotifications,
   getNotifications,
+  readAllNotifications,
 };

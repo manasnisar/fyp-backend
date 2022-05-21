@@ -23,7 +23,7 @@ const envVarsSchema = Joi.object()
     EMAIL_FROM: Joi.string()
       .description('the from field in the emails sent by the app')
       .default('Sharingan <mail@sharingan.me>'),
-    CORS_ORIGINS: Joi.string().description('whitelisted domains').default('http://localhost:3000'),
+    CORS_ORIGINS: Joi.string().description('whitelisted domains').default('http://localhost:3001'),
   })
   .unknown();
 

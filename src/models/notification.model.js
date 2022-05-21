@@ -17,17 +17,35 @@ const NotificationSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    message: {
+      type: String,
+      default: '',
+    },
     creationDate: {
       type: Date,
       default: Date.now,
     },
     type: {
       type: String,
-      enum: ['added_comment', 'issue_update', 'issue_delete', 'issue_assigned'],
+      enum: [
+        'added_comment',
+        'issue_update',
+        'issue_delete',
+        'issue_assigned',
+        'issue_unassigned',
+        'epic_update',
+        'epic_delete',
+        'sprint_started',
+        'sprint_ended',
+      ],
     },
     issue: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Issue',
+    },
+    epic: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Epic',
     },
   },
   {

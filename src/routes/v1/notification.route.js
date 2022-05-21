@@ -6,15 +6,22 @@ const { notificationController } = require('../../controllers');
 
 const router = express.Router();
 
-router.post(
-  '/read',
+router.get(
+  '/read/:notificationId',
   auth('readNotifications'),
   validate(notificationValidation.readNotifications),
   notificationController.readNotifications
 );
 
-router.post(
-  '/get',
+router.get(
+  '/read_all/:userId',
+  auth('readNotifications'),
+  validate(notificationValidation.readAllNotifications),
+  notificationController.readAllNotifications
+);
+
+router.get(
+  '/get/:token',
   auth('getNotifications'),
   validate(notificationValidation.getNotifications),
   notificationController.getNotifications
