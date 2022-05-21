@@ -1,12 +1,14 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { commentService, notificationService } = require('../services');
-const { Issue, Epic, User } = require('../models');
+const { Issue, Epic, User, Project } = require('../models');
 const getUserFromBearerToken = require('../utils/getBearerToken');
 
 const createComment = catchAsync(async (req, res) => {
   const comment = await commentService.createComment(req.body);
   const issue = await Issue.findOneAndUpdate({ _id: comment.issueId }, { $push: { comments: comment } });
+  const epic = await Epic.findById(issue.epicId);
+  const project = await Project.findById(epic.projectId);
   await Epic.findOneAndUpdate({ _id: comment.issueId }, { $push: { comments: comment } });
   if (issue) {
     const sender = await User.findById(getUserFromBearerToken(req));
@@ -27,6 +29,7 @@ const createComment = catchAsync(async (req, res) => {
         read: false,
         type: 'added_comment',
         issue: issue._id,
+        project: project._id,
         message: `A comment was added to ${issue.key} by ${sender.name} at ${comment.createdAt}`,
       });
     }
@@ -38,6 +41,8 @@ const createComment = catchAsync(async (req, res) => {
 const updateComment = catchAsync(async (req, res) => {
   const comment = await commentService.updateComment(req.params.commentId, req.body);
   const issue = await Issue.findOne({ _id: comment.issueId });
+  const epic = await Epic.findById(issue.epicId);
+  const project = await Project.findById(epic.projectId);
   if (issue) {
     const sender = await User.findById(getUserFromBearerToken(req));
     let receiver;
@@ -57,6 +62,7 @@ const updateComment = catchAsync(async (req, res) => {
         read: false,
         type: 'added_comment',
         issue: issue._id,
+        project: project._id,
         message: `A comment was updated by ${sender.name} on ${issue.key} at ${comment.createdAt}`,
       });
     }

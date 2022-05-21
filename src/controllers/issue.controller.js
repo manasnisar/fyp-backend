@@ -3,13 +3,14 @@ const httpStatus = require('http-status');
 // const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { issueService, notificationService } = require('../services');
-const { Epic, User, Issue } = require('../models');
+const { Epic, User, Issue, Project } = require('../models');
 const ApiError = require('../utils/ApiError');
 const getUserFromBearerToken = require('../utils/getBearerToken');
 
 const createIssue = catchAsync(async (req, res) => {
   const issue = await issueService.createIssue(req.body);
-  await Epic.findOneAndUpdate({ _id: issue.epicId }, { $inc: { totalIssues: 1 } });
+  const epic = await Epic.findOneAndUpdate({ _id: issue.epicId }, { $inc: { totalIssues: 1 } }, { new: true });
+  const project = await Project.findById(epic.projectId);
   const sender = await User.findById(getUserFromBearerToken(req));
   if (!sender._id.equals(issue.assigneeId)) {
     await notificationService.createNotification({
@@ -18,6 +19,7 @@ const createIssue = catchAsync(async (req, res) => {
       read: false,
       type: 'updated_issue',
       issue: issue._id,
+      project: project._id,
       message: `${sender.name} assigned ${issue.key} to you`,
     });
   }
@@ -41,6 +43,8 @@ const getIssueById = catchAsync(async (req, res) => {
 const updateIssueById = catchAsync(async (req, res) => {
   const oldIssue = await Issue.findById(req.params.issueId);
   const issue = await issueService.updateIssueById(req.params.issueId, req.body);
+  const epic = await Epic.findById(issue.epicId);
+  const project = await Project.findById(epic.projectId);
   const sender = await User.findById(getUserFromBearerToken(req));
   if (!sender._id.equals(oldIssue.assigneeId) && req.body.assigneeId) {
     await notificationService.createNotification({
@@ -49,6 +53,7 @@ const updateIssueById = catchAsync(async (req, res) => {
       read: false,
       type: 'updated_issue',
       issue: issue._id,
+      project: project._id,
       message: `${sender.name} unassigned ${issue.key} from you`,
     });
   }
@@ -59,6 +64,7 @@ const updateIssueById = catchAsync(async (req, res) => {
       read: false,
       type: 'updated_issue',
       issue: issue._id,
+      project: project._id,
       message: `${sender.name} updated ${issue.key} that you're watching`,
     });
   }
@@ -92,6 +98,7 @@ const updateIssueById = catchAsync(async (req, res) => {
       read: false,
       type: 'updated_issue',
       issue: issue._id,
+      project: project._id,
       message:
         receiver[i] === issue.assigneeId && !sender._id.equals(issue.assigneeId) && req.body.assigneeId
           ? `${sender.name} assigned ${issue.key} to you`
@@ -105,6 +112,8 @@ const updateIssueById = catchAsync(async (req, res) => {
 
 const deleteIssueById = catchAsync(async (req, res) => {
   const oldIssue = await Issue.findById(req.params.issueId);
+  const epic = await Epic.findById(oldIssue.epicId);
+  const project = await Project.findById(epic.projectId);
   await issueService.deleteIssueById(req.params.issueId);
   if (oldIssue) {
     const sender = await User.findById(getUserFromBearerToken(req));
@@ -127,6 +136,7 @@ const deleteIssueById = catchAsync(async (req, res) => {
         receiver: receiver[i],
         read: false,
         type: 'deleted_issue',
+        project: project._id,
         message: `${oldIssue.key} was deleted by ${sender.name}`,
       });
     }

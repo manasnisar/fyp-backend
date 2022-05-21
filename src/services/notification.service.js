@@ -9,7 +9,7 @@ const readAllNotifications = async (userId) => {
 };
 
 const getNotifications = async (userId) => {
-  return Notification.find({ receiver: userId, read: false }).populate('sender').populate('issue');
+  return Notification.find({ receiver: userId, read: false }).populate('sender').populate('issue').populate('project');
 };
 
 const createNotification = async (body) => {

@@ -40,6 +40,10 @@ const NotificationSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Issue',
     },
+    project: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Project',
+    },
     epic: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Epic',
