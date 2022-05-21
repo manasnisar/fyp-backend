@@ -104,7 +104,7 @@ const updateIssueById = catchAsync(async (req, res) => {
 });
 
 const deleteIssueById = catchAsync(async (req, res) => {
-  const oldIssue = await Issue.findById(req.params.issueId)
+  const oldIssue = await Issue.findById(req.params.issueId);
   await issueService.deleteIssueById(req.params.issueId);
   if (oldIssue) {
     const sender = await User.findById(getUserFromBearerToken(req));

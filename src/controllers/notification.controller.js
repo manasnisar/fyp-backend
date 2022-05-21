@@ -1,8 +1,6 @@
 const httpStatus = require('http-status');
-const jwt = require('jsonwebtoken');
 const { notificationService } = require('../services');
 const ApiError = require('../utils/ApiError');
-const config = require('../config/config');
 const getUserFromBearerToken = require('../utils/getBearerToken');
 
 const readNotifications = async (req, res) => {
