@@ -83,7 +83,6 @@ const verifyEmail = catchAsync(async (req, res) => {
 });
 
 const authChecker = catchAsync(async (req, res) => {
-  global.socketio.emit('fetch_notifications');
   res.send({ user: req.user });
 });
 

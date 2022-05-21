@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { notificationService } = require('../services');
 const ApiError = require('../utils/ApiError');
 const config = require('../config/config');
+const getUserFromBearerToken = require('../utils/getBearerToken');
 
 const readNotifications = async (req, res) => {
   try {
@@ -26,12 +27,7 @@ const readAllNotifications = async (req, res) => {
 
 const getNotifications = async (req, res) => {
   try {
-    let userId;
-    jwt.verify(req.params.token, config.jwt.secret, (err, decoded) => {
-      if (err) throw err;
-      userId = decoded.sub;
-    });
-    const notifications = await notificationService.getNotifications(userId);
+    const notifications = await notificationService.getNotifications(getUserFromBearerToken(req));
     res.status(httpStatus.OK).send(notifications);
   } catch (e) {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, e.message);

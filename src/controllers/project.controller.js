@@ -25,6 +25,7 @@ const createProject = catchAsync(async (req, res) => {
 
 const getProjectsForUser = catchAsync(async (req, res) => {
   const result = await projectService.getProjectsForUser(req.params.id);
+  global.socketio.emit('fetch_notifications');
   res.send(result);
 });
 
