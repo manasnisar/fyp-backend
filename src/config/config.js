@@ -16,7 +16,7 @@ const envVarsSchema = Joi.object()
       .default(30)
       .description('minutes after which reset password token expires'),
     JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.number()
-      .default(30)
+      .default(525960)
       .description('minutes after which verify email token expires'),
     MAILGUN_API_KEY: Joi.string().description('Mailgun API key'),
     MAILGUN_DOMAIN: Joi.string().description('Mailgun sending domain').default('mail.sharingan.me'),

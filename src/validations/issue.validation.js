@@ -34,6 +34,8 @@ const updateIssue = {
       description: Joi.string(),
       assigneeId: Joi.custom(objectId).allow(null),
       assignee: Joi.custom(objectId).allow(null),
+      reporterId: Joi.custom(objectId).allow(null),
+      reporter: Joi.custom(objectId).allow(null),
       inProgressSince: Joi.date(),
       estimate: Joi.number(),
     })

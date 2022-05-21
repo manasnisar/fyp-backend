@@ -3,7 +3,7 @@ const config = require('../config/config');
 
 const mg = mailgun({ apiKey: config.email.mailgunApiKey, domain: config.email.mailgunDomain });
 
-const sendInvitationEmail = async (recipientEmail, code, projectName) => {
+const sendInvitationEmail = async (recipientEmail, code, projectName, orgName) => {
   const data = {
     from: config.email.from,
     to: recipientEmail,
@@ -81,7 +81,7 @@ const sendInvitationEmail = async (recipientEmail, code, projectName) => {
                           </tr>
                           <tr>
                             <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Use this code to create your Sharingan account <a href='http://localhost:3001/signup'>here</a></div>
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Use <span style="font-weight:700;font-size:18px;">{{ORGANIZATION}}</span> as the organization name and the code below to create your Sharingan account <a href='http://localhost:3000/signup'>here</a></div>
                             </td>
                           </tr>
                           <tr>
@@ -143,6 +143,7 @@ const sendInvitationEmail = async (recipientEmail, code, projectName) => {
         </body>
       </html>`
       .replace('{{CODE}}', code)
+      .replace('{{ORGANIZATION}}', orgName)
       .replace('{{project}}', projectName),
   };
   await mg.messages().send(data);
