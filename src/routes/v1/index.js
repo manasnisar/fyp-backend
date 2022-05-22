@@ -6,6 +6,7 @@ const projectRoute = require('./project.route');
 const epicRoute = require('./epic.route');
 const issueRoute = require('./issue.route');
 const commentRoute = require('./comment.route');
+const notificationRoute = require('./notification.route');
 
 // const config = require('../../config/config');
 
@@ -39,6 +40,10 @@ const defaultRoutes = [
   {
     path: '/comment',
     route: commentRoute,
+  },
+  {
+    path: '/notification',
+    route: notificationRoute,
   },
 ];
 

@@ -6,3 +6,4 @@ module.exports.Epic = require('./epic.model');
 module.exports.Issue = require('./issue.model');
 module.exports.Comment = require('./comment.model');
 module.exports.Invitation = require('./invitation.model');
+module.exports.Notification = require('./notification.model');

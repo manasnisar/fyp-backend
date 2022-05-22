@@ -1,9 +1,10 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { projectService } = require('../services');
+const { projectService, notificationService } = require('../services');
 const { addProjectToOrgById } = require('../services/organization.service');
 const ApiError = require('../utils/ApiError');
 const { User } = require('../models');
+const getUserFromBearerToken = require('../utils/getBearerToken');
 
 const createProject = catchAsync(async (req, res) => {
   try {
@@ -25,6 +26,7 @@ const createProject = catchAsync(async (req, res) => {
 
 const getProjectsForUser = catchAsync(async (req, res) => {
   const result = await projectService.getProjectsForUser(req.params.id);
+  global.socketio.emit('fetch_notifications');
   res.send(result);
 });
 
@@ -52,12 +54,44 @@ const deleteProjectById = catchAsync(async (req, res) => {
 });
 
 const startSprint = catchAsync(async (req, res) => {
-  await projectService.startSprint(req.params.projectId, req.body.noOfWeeks);
+  const project = await projectService.startSprint(req.params.projectId, req.body.noOfWeeks);
+  const sender = await User.findById(getUserFromBearerToken(req));
+  const projectMembers = await User.find({ projects: project._id });
+  const receiver = projectMembers.map((member) => member._id).filter((userId) => !userId.equals(sender._id));
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < receiver.length; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    await notificationService.createNotification({
+      sender: sender._id,
+      receiver: receiver[i],
+      read: false,
+      type: 'started_sprint',
+      project: project._id,
+      message: `Sprint for project ${project.name} has been started by ${sender.name}`,
+    });
+  }
+  global.socketio.emit('fetch_notifications');
   res.sendStatus(200);
 });
 
 const endSprint = catchAsync(async (req, res) => {
-  await projectService.endSprint(req.params.projectId);
+  const project = await projectService.endSprint(req.params.projectId);
+  const sender = await User.findById(getUserFromBearerToken(req));
+  const projectMembers = await User.find({ projects: project._id });
+  const receiver = projectMembers.map((member) => member._id).filter((userId) => !userId.equals(sender._id));
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < receiver.length; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    await notificationService.createNotification({
+      sender: sender._id,
+      receiver: receiver[i],
+      read: false,
+      type: 'ended_sprint',
+      project: project._id,
+      message: `Sprint for project ${project.name} has been ended by ${sender.name}`,
+    });
+  }
+  global.socketio.emit('fetch_notifications');
   res.sendStatus(200);
 });
 

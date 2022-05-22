@@ -7,3 +7,4 @@ module.exports.projectService = require('./project.service');
 module.exports.epicService = require('./epic.service');
 module.exports.issueService = require('./issue.service');
 module.exports.commentService = require('./comment.service');
+module.exports.notificationService = require('./notification.service');

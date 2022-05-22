@@ -1,8 +1,8 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const epicValidation = require('../../validations/epic.validation');
-const epicController = require('../../controllers/epic.controller');
+const { epicValidation } = require('../../validations');
+const { epicController } = require('../../controllers');
 
 const router = express.Router();
 

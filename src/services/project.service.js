@@ -114,12 +114,16 @@ const startSprint = async (projectId, noOfWeeks) => {
     },
     [{ $set: { status: '$previousSprintStatus', previousSprintStatus: null } }]
   );
-  await Project.findByIdAndUpdate(projectId, {
-    sprintStatus: 'active',
-    sprintStartDate: Date.now(),
-    sprintEndDate: Date.now() + timeInFuture,
-    $inc: { sprintNumber: 1 },
-  });
+  return Project.findByIdAndUpdate(
+    projectId,
+    {
+      sprintStatus: 'active',
+      sprintStartDate: Date.now(),
+      sprintEndDate: Date.now() + timeInFuture,
+      $inc: { sprintNumber: 1 },
+    },
+    { new: true }
+  );
 };
 
 const endSprint = async (projectId) => {
@@ -128,11 +132,15 @@ const endSprint = async (projectId) => {
   await Issue.updateMany({ epicId: { $in: epicIds }, status: { $in: ['ready', 'blocked', 'inProgress', 'inQa'] } }, [
     { $set: { previousSprintStatus: '$status', status: 'planned' } },
   ]);
-  await Project.findByIdAndUpdate(projectId, {
-    sprintStatus: 'inactive',
-    sprintStartDate: null,
-    SprintEndDate: null,
-  });
+  return Project.findByIdAndUpdate(
+    projectId,
+    {
+      sprintStatus: 'inactive',
+      sprintStartDate: null,
+      SprintEndDate: null,
+    },
+    { new: true }
+  );
 };
 
 module.exports = {

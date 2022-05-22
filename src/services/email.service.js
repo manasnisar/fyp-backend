@@ -227,7 +227,7 @@ const sendResetPasswordEmail = async (recipientEmail, token) => {
                           </tr>
                           <tr>
                             <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Click <a href='http://localhost:3000/reset_pass/{{token}}'>here</a> to reset your password. This reset link will expire in 30 minutes</div>
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Click <a href='http://localhost:3001/reset_pass/{{token}}'>here</a> to reset your password. This reset link will expire in 30 minutes</div>
                             </td>
                           </tr>
                           <tr>
@@ -358,7 +358,7 @@ const sendVerificationEmail = async (recipientEmail, token) => {
                           </tr>
                           <tr>
                             <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Click <a href='http://localhost:3000/verify_account/{{token}}'>here</a> to verify your account</div>
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Click <a href='http://localhost:3001/verify_account/{{token}}'>here</a> to verify your account. This verification link will expire in 30 minutes</div>
                             </td>
                           </tr>
                           <tr>
