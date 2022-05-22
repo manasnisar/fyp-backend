@@ -17,7 +17,7 @@ server.listen(config.port, () => {
 const allowedOrigins = (config.corsOrigins || '').split(' ');
 const io = new Server(server, {
   cors: {
-    origin: function (origin, callback) {
+    origin(origin, callback) {
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
