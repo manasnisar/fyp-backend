@@ -38,17 +38,18 @@ app.use(mongoSanitize());
 app.use(compression());
 
 // enable cors
-const corsOptions = {
-  origin: (config.corsOrigins || '').split(' '),
-};
+const allowedOrigins = (config.corsOrigins || '').split(' ');
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', config.corsOrigins);
+  const { origin } = req.headers;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
-app.use(cors(corsOptions));
 
 // jwt authentication
 app.use(passport.initialize());

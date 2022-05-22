@@ -14,9 +14,16 @@ server.listen(config.port, () => {
   logger.info(`Listening to port ${config.port}`);
 });
 
+const allowedOrigins = (config.corsOrigins || '').split(' ');
 const io = new Server(server, {
   cors: {
-    origin: config.corsOrigins,
+    origin: function (origin, callback) {
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ['GET', 'POST'],
   },
 });
@@ -24,31 +31,6 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   logger.info('Client Connected!');
   global.socketio = io;
-
-  // socket.on('initial_data', async () => {
-  //   const feed = await Feed.find({}).sort({ createdAt: -1 });
-  //   io.sockets.emit('get_data', feed);
-  // });
-  //
-  // // Placing the order, gets called from /src/main/PlaceOrder.js of Frontend
-  // socket.on('post_data', async (body) => {
-  //   const title = body;
-  //   const feed = new Feed({ title });
-  //   await feed.save();
-  //   io.sockets.emit('change_data');
-  // });
-  //
-  // socket.on('check_all_notifications', async () => {
-  //   const feeds = await Feed.find({});
-  //
-  //   feeds.forEach((feed) => {
-  //     feed.read = true;
-  //   });
-  //
-  //   await Feed.create(feeds);
-  //
-  //   io.sockets.emit('change_data');
-  // });
 
   // disconnect is fired when a client leaves the server
   socket.on('disconnect', () => {
