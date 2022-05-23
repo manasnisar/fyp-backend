@@ -2,8 +2,7 @@ const mailgun = require('mailgun-js');
 const config = require('../config/config');
 
 const mg = mailgun({ apiKey: config.email.mailgunApiKey, domain: config.email.mailgunDomain });
-const frontEndUrl =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://www.sharingan.me';
+const frontEndUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://www.sharingan.me';
 
 const sendInvitationEmail = async (recipientEmail, code, projectName, orgName) => {
   const data = {
