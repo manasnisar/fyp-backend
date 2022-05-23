@@ -3,7 +3,9 @@ const config = require('../config/config');
 
 const mg = mailgun({ apiKey: config.email.mailgunApiKey, domain: config.email.mailgunDomain });
 const frontEndUrl =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://sharingan-frontend.herokuapp.com/';
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : 'https://628bf2ec9d7e3e1c57507091--spiffy-cuchufli-5c6239.netlify.app';
 
 const sendInvitationEmail = async (recipientEmail, code, projectName, orgName) => {
   const data = {

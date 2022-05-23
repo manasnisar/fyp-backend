@@ -25,7 +25,9 @@ const envVarsSchema = Joi.object()
       .default('Sharingan <mail@sharingan.me>'),
     CORS_ORIGINS: Joi.string()
       .description('whitelisted domains')
-      .default('http://localhost:3000 https://www.sharingan.me https://sharingan-frontend.herokuapp.com'),
+      .default(
+        'http://localhost:3000 https://www.sharingan.me https://sharingan-frontend.herokuapp.com https://628bf2ec9d7e3e1c57507091--spiffy-cuchufli-5c6239.netlify.app'
+      ),
   })
   .unknown();
 
