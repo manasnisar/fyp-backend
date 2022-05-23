@@ -7,10 +7,10 @@ const getUserFromBearerToken = require('../utils/getBearerToken');
 const createComment = catchAsync(async (req, res) => {
   const comment = await commentService.createComment(req.body);
   const issue = await Issue.findOneAndUpdate({ _id: comment.issueId }, { $push: { comments: comment } });
-  const epic = await Epic.findById(issue.epicId);
-  const project = await Project.findById(epic.projectId);
   await Epic.findOneAndUpdate({ _id: comment.issueId }, { $push: { comments: comment } });
   if (issue) {
+    const epic = await Epic.findById(issue.epicId);
+    const project = await Project.findById(epic.projectId);
     const sender = await User.findById(getUserFromBearerToken(req));
     let receiver;
     receiver = [issue.reporterId, issue.assigneeId];
