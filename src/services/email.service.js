@@ -2,6 +2,8 @@ const mailgun = require('mailgun-js');
 const config = require('../config/config');
 
 const mg = mailgun({ apiKey: config.email.mailgunApiKey, domain: config.email.mailgunDomain });
+const frontEndUrl =
+  process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://sharingan-frontend.herokuapp.com/';
 
 const sendInvitationEmail = async (recipientEmail, code, projectName, orgName) => {
   const data = {
@@ -81,7 +83,7 @@ const sendInvitationEmail = async (recipientEmail, code, projectName, orgName) =
                           </tr>
                           <tr>
                             <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Use <span style="font-weight:700;font-size:18px;">{{ORGANIZATION}}</span> as the organization name and the code below to create your Sharingan account <a href='https://sharingan-frontend.herokuapp.com/signup'>here</a></div>
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Use <span style="font-weight:700;font-size:18px;">{{ORGANIZATION}}</span> as the organization name and the code below to create your Sharingan account <a href='${frontEndUrl}/signup'>here</a></div>
                             </td>
                           </tr>
                           <tr>
@@ -227,7 +229,7 @@ const sendResetPasswordEmail = async (recipientEmail, token) => {
                           </tr>
                           <tr>
                             <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Click <a href='https://sharingan-frontend.herokuapp.com/reset_pass/{{token}}'>here</a> to reset your password. This reset link will expire in 30 minutes</div>
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Click <a href='${frontEndUrl}/reset_pass/{{token}}'>here</a> to reset your password. This reset link will expire in 30 minutes</div>
                             </td>
                           </tr>
                           <tr>
@@ -358,7 +360,7 @@ const sendVerificationEmail = async (recipientEmail, token) => {
                           </tr>
                           <tr>
                             <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Click <a href='https://sharingan-frontend.herokuapp.com/verify_account/{{token}}'>here</a> to verify your account. This verification link will expire in 30 minutes</div>
+                              <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:2;text-align:left;color:#000000;">Click <a href='${frontEndUrl}/verify_account/{{token}}'>here</a> to verify your account. This verification link will expire in 30 minutes</div>
                             </td>
                           </tr>
                           <tr>
